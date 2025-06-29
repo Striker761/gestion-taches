@@ -23,6 +23,21 @@ function getPriorityClasses(priority) {
   }
 }
 
+// Sauvegarde dans localStorage
+function saveData() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  localStorage.setItem("trash", JSON.stringify(trash));
+}
+
+// Chargement depuis localStorage
+function loadData() {
+  const savedTasks = localStorage.getItem("tasks");
+  const savedTrash = localStorage.getItem("trash");
+
+  if (savedTasks) tasks = JSON.parse(savedTasks);
+  if (savedTrash) trash = JSON.parse(savedTrash);
+}
+
 // Création d'une tâche DOM avec bouton "X" pour supprimer
 function createTaskElement(task) {
   const div = document.createElement("div");
@@ -99,6 +114,7 @@ function renderBoard() {
       if (!task) return;
       if (task.status !== status) {
         task.status = status;
+        saveData();
         renderBoard();
       }
     });
@@ -139,6 +155,7 @@ addBtn.addEventListener("click", () => {
   };
 
   tasks.push(newTask);
+  saveData();
   taskNameInput.value = "";
   renderBoard();
 });
@@ -154,6 +171,7 @@ emptyTrashBtn.addEventListener("click", () => {
     )
   ) {
     trash = [];
+    saveData();
     renderTrash();
   }
 });
@@ -165,6 +183,7 @@ function moveToTrash(id) {
   const [task] = tasks.splice(index, 1);
   trash.push(task);
 
+  saveData();
   renderBoard();
   renderTrash();
 }
@@ -176,6 +195,7 @@ function restoreFromTrash(id) {
   const [task] = trash.splice(index, 1);
   tasks.push(task);
 
+  saveData();
   renderBoard();
   renderTrash();
 }
@@ -187,5 +207,7 @@ toggleDarkBtn.addEventListener("click", () => {
   document.documentElement.classList.toggle("dark");
 });
 
+// Au chargement de la page, on restaure les données sauvegardées
+loadData();
 renderBoard();
 renderTrash();
