@@ -27,15 +27,16 @@ function getPriorityClasses(priority) {
 function saveData() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
   localStorage.setItem("trash", JSON.stringify(trash));
+  console.log("Données sauvegardées:", tasks, trash);
 }
 
-// Chargement depuis localStorage
 function loadData() {
   const savedTasks = localStorage.getItem("tasks");
   const savedTrash = localStorage.getItem("trash");
 
   if (savedTasks) tasks = JSON.parse(savedTasks);
   if (savedTrash) trash = JSON.parse(savedTrash);
+  console.log("Données chargées:", tasks, trash);
 }
 
 // Création d'une tâche DOM avec bouton "X" pour supprimer
